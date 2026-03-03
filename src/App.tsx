@@ -416,12 +416,12 @@ const Catalog = () => {
           </h1>
           <p className="text-black/60 text-sm md:text-base">Explore nossa curadoria de conteúdos {typeFilter ? typeFilter : 'gratuitos e premium'}.</p>
         </div>
-        <div className="flex flex-nowrap justify-center md:justify-start gap-2 bg-white p-1 rounded-2xl border border-black/5 self-center md:self-auto overflow-x-auto w-full md:w-auto custom-scrollbar pb-2 md:pb-0">
+        <div className="flex justify-center md:justify-start gap-1 bg-white p-1 rounded-2xl border border-black/5 self-center md:self-auto w-full min-w-0 max-w-full sm:w-auto">
           {['all', 'IA', 'Marketing', 'Conteúdo'].map((f) => (
             <button
               key={f}
               onClick={() => setFilter(f)}
-              className={`px-4 md:px-6 py-2 rounded-xl text-sm font-bold transition-all whitespace-nowrap shrink-0 text-center ${filter === f ? "bg-black text-white" : "text-black/60 hover:bg-black/5"
+              className={`px-2 min-w-0 sm:px-6 py-1.5 sm:py-2 rounded-xl text-[10px] sm:text-sm font-bold transition-all truncate text-center flex-1 sm:flex-none ${filter === f ? "bg-black text-white" : "text-black/60 hover:bg-black/5"
                 }`}
             >
               {f === 'all' ? 'Todos' : f}
