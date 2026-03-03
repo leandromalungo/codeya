@@ -354,7 +354,7 @@ const Tracks = () => {
 
   return (
     <div className="space-y-8 md:space-y-12">
-      <header>
+      <header className="text-center md:text-left">
         <h1 className="text-3xl md:text-4xl mb-2">Trilhas de Aprendizado</h1>
         <p className="text-black/60 text-sm md:text-base">Caminhos estruturados para você dominar uma nova habilidade do zero ao profissional.</p>
       </header>
