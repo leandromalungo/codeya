@@ -19,25 +19,9 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { InfiniteLogo, LoadingOverlay } from "./components/InfiniteLogo";
-
-// --- Types ---
-interface Course {
-  id: number;
-  title: string;
-  description: string;
-  long_description?: string;
-  learning_objectives?: string;
-  category: string;
-  type: 'free' | 'premium';
-  thumbnail: string;
-  instructor: string;
-  difficulty: string;
-  duration: string;
-  external_url?: string;
-  progress?: number;
-}
-
+import { staticCourses, staticTracks, Course } from "./data";
 // --- Components ---
+
 
 const Sidebar = ({ isMobileOpen, setIsMobileOpen }: { isMobileOpen: boolean, setIsMobileOpen: (v: boolean) => void }) => {
   const location = useLocation();
@@ -253,19 +237,9 @@ const Onboarding = ({ onComplete }: { onComplete: () => void }) => {
 
 const CourseDetail = () => {
   const { id } = useParams();
-  const [course, setCourse] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
+  const course = staticCourses.find(c => c.id === parseInt(id || ""));
 
-  useEffect(() => {
-    fetch(`/api/courses/${id}`)
-      .then(res => res.json())
-      .then(c => {
-        setCourse(c);
-        setLoading(false);
-      });
-  }, [id]);
-
-  if (loading) return <LoadingOverlay />;
+  if (!course) return <div className="p-10 text-center">Curso não encontrado.</div>;
 
   const objectives = JSON.parse(course.learning_objectives || "[]");
   const modules = JSON.parse(course.content || "[]");
@@ -376,19 +350,7 @@ const CourseDetail = () => {
 };
 
 const Tracks = () => {
-  const [tracks, setTracks] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetch("/api/tracks")
-      .then(res => res.json())
-      .then(t => {
-        setTracks(t);
-        setLoading(false);
-      });
-  }, []);
-
-  if (loading) return <LoadingOverlay />;
+  const tracks = staticTracks;
 
   return (
     <div className="space-y-8 md:space-y-12">
@@ -434,59 +396,16 @@ const Tracks = () => {
 };
 
 const Catalog = () => {
-  const [courses, setCourses] = useState<Course[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [filter, setFilter] = useState('all');
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const typeFilter = queryParams.get('type');
 
-  useEffect(() => {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 8000);
-
-    fetch("/api/courses", { signal: controller.signal })
-      .then(res => {
-        if (!res.ok) throw new Error(`Erro do servidor: ${res.status}`);
-        return res.json();
-      })
-      .then(c => {
-        setCourses(c);
-        setLoading(false);
-        clearTimeout(timeoutId);
-      })
-      .catch(err => {
-        console.error("Catalog fetch error:", err);
-        setError(err.name === 'AbortError' ? "A requisição demorou muito tempo." : err.message);
-        setLoading(false);
-        clearTimeout(timeoutId);
-      });
-
-    return () => clearTimeout(timeoutId);
-  }, []);
-
-  const filtered = courses.filter(c => {
+  const filtered = staticCourses.filter(c => {
     const matchesCategory = filter === 'all' || c.category.toLowerCase() === filter.toLowerCase();
     const matchesType = !typeFilter || c.type === typeFilter;
     return matchesCategory && matchesType;
   });
-
-  if (loading) return <LoadingOverlay />;
-  if (error) return (
-    <div className="flex flex-col items-center justify-center h-[60vh] space-y-6 p-10 text-center">
-      <div className="p-4 bg-red-50 rounded-full text-red-500">
-        <Settings size={40} className="animate-spin-slow" />
-      </div>
-      <div>
-        <h3 className="text-xl font-bold mb-2">Ops! Não conseguimos carregar o catálogo</h3>
-        <p className="text-black/60 max-w-md">{error}</p>
-      </div>
-      <button onClick={() => window.location.reload()} className="px-8 py-3 bg-black text-white rounded-2xl font-bold hover:scale-105 transition-transform">
-        Tentar Novamente
-      </button>
-    </div>
-  );
 
   return (
     <div className="space-y-8 md:space-y-10">
