@@ -409,19 +409,19 @@ const Catalog = () => {
 
   return (
     <div className="space-y-8 md:space-y-10">
-      <header className="flex flex-col md:flex-row md:items-end justify-between gap-4 md:gap-6">
+      <header className="flex flex-col md:flex-row md:items-end justify-between items-center text-center md:text-left gap-4 md:gap-6">
         <div>
           <h1 className="text-3xl md:text-4xl mb-2">
             {typeFilter === 'free' ? 'Cursos Gratuitos' : typeFilter === 'premium' ? 'Cursos Premium' : 'Catálogo de Cursos'}
           </h1>
           <p className="text-black/60 text-sm md:text-base">Explore nossa curadoria de conteúdos {typeFilter ? typeFilter : 'gratuitos e premium'}.</p>
         </div>
-        <div className="flex flex-wrap gap-2 bg-white p-1 rounded-2xl border border-black/5 self-start md:self-auto overflow-x-auto w-full md:w-auto -mx-4 px-4 md:mx-0 md:px-1 custom-scrollbar pb-2 md:pb-0">
+        <div className="flex flex-nowrap justify-center md:justify-start gap-2 bg-white p-1 rounded-2xl border border-black/5 self-center md:self-auto overflow-x-auto w-full md:w-auto custom-scrollbar pb-2 md:pb-0">
           {['all', 'IA', 'Marketing', 'Conteúdo'].map((f) => (
             <button
               key={f}
               onClick={() => setFilter(f)}
-              className={`px-4 md:px-6 py-2 rounded-xl text-sm font-bold transition-all whitespace-nowrap flex-1 md:flex-none text-center ${filter === f ? "bg-black text-white" : "text-black/60 hover:bg-black/5"
+              className={`px-4 md:px-6 py-2 rounded-xl text-sm font-bold transition-all whitespace-nowrap shrink-0 text-center ${filter === f ? "bg-black text-white" : "text-black/60 hover:bg-black/5"
                 }`}
             >
               {f === 'all' ? 'Todos' : f}
